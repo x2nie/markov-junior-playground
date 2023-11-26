@@ -1,0 +1,12 @@
+.title-bar {
+    .untitled {
+        width: 200px;
+        color: black;
+
+        & > div {
+            padding: 2px;
+            background: inherit;
+        }
+    }
+
+}
