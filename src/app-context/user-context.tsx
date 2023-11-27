@@ -36,7 +36,7 @@ export interface AppState {
  */
 const defaultState: AppState = {
   user: {},
-  updateState: (newState?: Partial<AppState>) => {},
+  updateState: (newState?: Partial<AppState>) => {newState},
 };
 
 /**

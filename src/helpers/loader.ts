@@ -48,8 +48,8 @@ export class Loader {
             canvas.width = bitmap.width;
             canvas.height = bitmap.height;
 
-            const context = canvas.getContext("2d");
-            context?.drawImage(bitmap, 0, 0);
+            const context = canvas.getContext("2d")!;
+            context.drawImage(bitmap, 0, 0);
             bitmap.close();
 
             const { data, width, height } = context.getImageData(
@@ -62,7 +62,7 @@ export class Loader {
             return [new Int32Array(data.buffer), width, height, 1];
         } catch (e) {
             console.error(e);
-            return [null, -1, -1, -1];
+            return [new Int32Array(0), -1, -1, -1];
         }
     }
 }

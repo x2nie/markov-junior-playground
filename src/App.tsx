@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './assets/style/App.scss'
@@ -7,7 +7,7 @@ import { DummyUser, UserContext } from "./app-context/user-context";
 import { Top } from './top';
 import { Editor } from './editor';
 import { Preview } from './preview';
-import { Loader} from './helpers/loader'
+// import { Loader} from './helpers/loader'
 
 
 
