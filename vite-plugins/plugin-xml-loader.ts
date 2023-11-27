@@ -1,4 +1,4 @@
-// import { readFileSync } from 'fs';
+//@ts-nocheck
 import { X2jOptions, XMLParser } from 'fast-xml-parser';
 
 var options0 = {
