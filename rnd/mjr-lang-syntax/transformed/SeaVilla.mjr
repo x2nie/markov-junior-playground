@@ -1,0 +1,433 @@
+﻿sequence (values="Bwy", symmetry="(xy)"):
+  prl (B -> w)
+  prl (w * -> y *)
+  prl (***/*y*/*** -> ***/*B*/***)
+  wfc (values="BaV OoYhSAWwRrlgvPpxbUuCcKkXGEFi", tileset="MarchingHills", overlap="-3"):
+    rule (w -> Stone)
+    rule (y -> Empty)
+
+    prl (BBBBB/BBBBB/BBBBB/BBBBB/BBBBB aBBBa/BBBBB/BBBBB/BBBBB/aBBBa -> *****/*****/**Y**/*****/***** *****/*hah*/*aaa*/*hah*/*****)
+    prl (BBBBB/BBBBB/BBBBB hBBBh/aBBBa/hBBBh -> *****/**S**/***** *AAA*/*aaa*/*AAA*)
+    prl (BBB/BBB/BBB hah/BBB/BBB -> ***/***/*S* ***/AaA/AaA)
+    prl (aBBBa -> *AaA*)
+    prl (steps="1"):
+      rule (a B -> * a)
+      rule (h B -> * a)
+      rule (A B -> * a)
+    
+    prl: # mark water
+      rule (Y * * -> O * *)
+      rule (S * * -> W * *)
+      rule (V * * -> l * *)
+    
+    prl:
+      rule (Y -> w)
+      rule (S -> w)
+      rule (V -> w)
+    
+    prl:
+      rule (O -> Y)
+      rule (W -> S)
+      rule (l -> V)
+    
+    prl (***/*A*/*** -> ***/*W*/***)
+    prl (BwB/BBB ***/AaA -> *u*/*** ***/***)
+    prl (W -> A)
+    markov: # draw all possible bridges
+      one (YR/BB/*B/SB -> *r/**/**/**) # cancel purposeless bridge
+      one (BYB/BRB/BBB/BSB BhB/BBB/BBB/AaA -> ***/*B*/***/*** ***/*a*/*a*/***) # connect
+      one: # continue
+        rule (BSB/BRB/BBB/BBB/BBB *a*/BBB/BBB/BBB/BBB -> ***/*B*/***/*Y*/*R* ***/*a*/*a*/*h*/***)
+        rule (BYB/BRB/BBB/BBB/BBB *h*/BBB/BBB/BBB/BBB -> ***/*B*/***/*S*/*R* ***/*a*/*a*/*a*/***)
+      
+      one: # retract
+        rule (BBB/BBB/BYB/BrB *a*/BaB/BhB/BBB -> *r*/***/*B*/*B* *B*/*B*/*B*/***)
+        rule (BBB/BBB/BSB/BrB *a*/BaB/BaB/BBB -> *r*/***/*B*/*B* *B*/*B*/*B*/***)
+      
+      one (R -> r) # fail
+      one (BSB/BBB AaA/BBB -> ***/*R* ***/***) # start
+    
+    prl (r -> B)
+    all (aaa/BBB BSB/BBB AaA/BaB -> *r*/*** ***/*** ***/***) # ban stairs above bridges
+    all (YBBSBBY -> *ii*ii*) # draw all possible paths
+    all: # draw stairs
+      rule (BBBBB YBBSB aaaaB aaaaB Y**Si -> ***** *ii** ***i* ***i* *****)
+      rule (BBBBB YBBSB aaaaB aaaaB YBBSB aaaaB aaaaB Y**Si -> ***** *ii** ***i* ***i* ***** ***i* ***i* *****)
+      rule (BBBBB YBBSB aaaaB aaaaB YBBSB aaaaB aaaaB YBBSB aaaaB aaaaB Y**Si -> ***** *ii** ***i* ***i* ***** ***i* ***i* ***** ***i* ***i* *****)
+      rule (BBBBB YBBSB aaaaB aaaaB wBBw* -> ***** *ii** ***i* ***i* *****)
+    
+    all (*BB* uBBw -> **** ***u) # find external descents
+    all: # prepare endpoints for the big cycle
+      rule (iYi -> *x*)
+      rule (Yi/i* -> x*/**)
+    
+    prl:
+      rule (r -> a)
+      rule (Y -> o)
+      rule (S -> o)
+      rule (a i -> * F)
+      rule (a x -> * b)
+    
+    one (x -> R steps="1")
+    one (steps="1"):
+      rule (x -> l)
+      field (for="l", from="R", on="ioxFb") не уверен насчет Fb
+    
+    one (R -> x)
+    markov:
+      one (lW -> R* symmetry="(xyz)")
+      path (from="x", to="l", on="iox", color="W", longest="True")
+    
+    one (Wx -> Wl symmetry="(xyz)")
+    prl:
+      rule (F -> i)
+      rule (b -> x)
+    
+    markov:
+      one (Sl -> SW symmetry="(xyz)")
+      path (from="R", to="l", on="iox", color="S")
+    
+    all:
+      rule (lB -> *l)
+      rule (lW -> *l)
+    
+    prl:
+      rule (S -> W)
+      rule (x -> o)
+    
+    one (RWW* -> xpPR symmetry="(xyz)")
+    prl (R -> x)
+    all: # remove stairs incompatible with paths
+      rule (iio aai aai **x -> BB* **a **a ***)
+      rule (iio aai aai BBo aai aai **x -> BB* **a **a *** **a **a ***)
+      rule (iio aai aai BBo aai aai BBo aai aai **x -> BB* **a **a *** **a **a *** **a **a ***)
+    
+    path (from="x", to="u", on="io", color="W") # connect to water
+    one (W -> S steps="1")
+    one (SW -> SS symmetry="(xyz)")
+    all (symmetry="(xyz)"):
+      rule (uWWW -> *iio)
+      rule (oWWW -> *iio)
+      rule (oWWx -> *ii*)
+      rule (uSSS -> *Ppu)
+      rule (uSSx -> xPp*)
+    
+    prl (u * * -> x * *)
+    all: # fail on wrong stair turn
+      rule (gB -> *g)
+      rule (xPp p** P** xpP -> ggg ggg ggg ggg)
+      rule (xpP P** p** xPp -> ggg ggg ggg ggg)
+      rule (xPp p** P** *** p** P** xpP -> ggg ggg ggg ggg ggg ggg ggg)
+      rule (xpP P** p** *** P** p** xPp -> ggg ggg ggg ggg ggg ggg ggg)
+      rule (xPp p** P** *** p** P** *** p** P** xpP -> ggg ggg ggg ggg ggg ggg ggg ggg ggg ggg)
+      rule (xpP P** p** *** P** p** *** P** p** xPp -> ggg ggg ggg ggg ggg ggg ggg ggg ggg ggg)
+    
+    all: # delete unused descents
+      rule (iio aai aai BBu -> BB* **a **a ***)
+      rule (iio aai aai BBw -> BB* **a **a ***)
+    
+    prl:
+      rule (BxB AaA -> *b* ***)
+      rule (BxB B*B -> *b* ***)
+      rule (***/*o*/*** hah/aaa/hah -> ***/*O*/*** ***/***/***)
+      rule (o h -> O *)
+    
+    markov: # build trees to prepare key placement
+      one:
+        rule (iYF -> r**)
+        rule (iY/*F -> r*/**)
+      
+      one (F -> i)
+      one:
+        rule (YiioiiO -> *SS*SSY)
+        rule (Yiio*** ***i*** ***i*** ***oiiO -> *SS**** ***S*** ***S*** ****SSY)
+        rule (***oiiO ***i*** ***i*** Yiio*** -> ****SSY ***S*** ***S*** *SS****)
+        rule (Yiio*** ***i*** ***i*** ***o*** ***i*** ***i*** ***oiiO -> *SS**** ***S*** ***S*** ******* ***S*** ***S*** ****SSY)
+        rule (***oiiO ***i*** ***i*** ***o*** ***i*** ***i*** Yiio*** -> ****SSY ***S*** ***S*** ******* ***S*** ***S*** *SS****)
+        rule (Yiio*** ***i*** ***i*** ***o*** ***i*** ***i*** ***o*** ***i*** ***i*** ***oiiO -> *SS**** ***S*** ***S*** ******* ***S*** ***S*** ******* ***S*** ***S*** ****SSY)
+        rule (***oiiO ***i*** ***i*** ***o*** ***i*** ***i*** ***o*** ***i*** ***i*** Yiio*** -> ****SSY ***S*** ***S*** ******* ***S*** ***S*** ******* ***S*** ***S*** *SS****)
+      
+      one (xPpbP/i**** -> Y**c*/F****)
+    
+    all (pY -> *C)
+    path (from="Y", to="C", on="SoCY", color="l", longest="True")
+    prl:
+      rule (S -> i)
+      rule (r -> i)
+    
+    one (Yl -> K* steps="1")
+    one (Yl -> X* steps="1")
+    one (Yl -> R* steps="1")
+    all (symmetry="(xyz)"):
+      rule (Klll -> ***K)
+      rule (KllC -> ***k)
+      rule (Xlll -> ***X)
+      rule (XllC -> ***G)
+      rule (Rlll -> ***R)
+      rule (RllC -> ***r)
+      rule (Ylll -> *iiY)
+      rule (YllC -> *ii*)
+      rule (kPpc -> o**k)
+      rule (GPpc -> o**G)
+      rule (rPpc -> o**r)
+    
+    all (symmetry="(xyz)"):
+      rule (lKl -> *o*)
+      rule (lK/*l -> *o/**)
+      rule (lXl -> *o*)
+      rule (lX/*l -> *o/**)
+      rule (lRl -> *o*)
+      rule (lR/*l -> *o/**)
+    
+    prl:
+      rule (BPB BaB -> *** *E*)
+      rule (BpB BaB -> *** *E*)
+      rule (BbB BaB -> *** *E*)
+    
+    prl:
+      rule (P -> l)
+      rule (p -> l)
+      rule (C -> o)
+      rule (c -> o)
+      rule (x -> o)
+      rule (b -> o)
+      rule (Y -> o)
+    
+    prl:
+      rule (***/*o*/*** hah/aaa/hah -> ***/*Y*/*** ***/***/***)
+      rule (o h -> Y *)
+    
+    all:
+      rule (Ylll -> ***o)
+      rule (olll -> ***Y)
+      rule (o l l l -> * * * o)
+      rule (l l l o -> o * * *)
+    
+    prl (Yl -> O*)
+    union (symbol="6", values="PY")
+    markov: # mark open areas
+      all:
+        rule (Piioii6 -> *SS*SSP)
+        rule (Piio*** ***i*** ***i*** ***oii6 -> *SS**** ***S*** ***S*** ****SSP)
+        rule (***oii6 ***i*** ***i*** Piio*** -> ****SSP ***S*** ***S*** *SS****)
+        rule (Piio*** ***i*** ***i*** ***o*** ***i*** ***i*** ***oii6 -> *SS**** ***S*** ***S*** ******* ***S*** ***S*** ****SSP)
+        rule (***oii6 ***i*** ***i*** ***o*** ***i*** ***i*** Piio*** -> ****SSP ***S*** ***S*** ******* ***S*** ***S*** *SS****)
+        rule (Piio*** ***i*** ***i*** ***o*** ***i*** ***i*** ***o*** ***i*** ***i*** ***oii6 -> *SS**** ***S*** ***S*** ******* ***S*** ***S*** ******* ***S*** ***S*** ****SSP)
+        rule (***oii6 ***i*** ***i*** ***o*** ***i*** ***i*** ***o*** ***i*** ***i*** Piio*** -> ****SSP ***S*** ***S*** ******* ***S*** ***S*** ******* ***S*** ***S*** *SS****)
+      
+      all (P -> p)
+      one (O -> P)
+    
+    prl:
+      rule (p -> o)
+      rule (i -> B)
+    
+    all (symmetry="(xyz)"):
+      rule (ullo -> ***O)
+      rule (Ollo -> ***O)
+      rule (OSSo -> ***O)
+    
+    one (steps="1"): # place the goal
+      rule (***/*o*/*** hah/aaa/hah -> ***/*U*/*** ***/***/***)
+      field (for="U", from="u", on="UKXRkGrSaOol")
+    
+    one: # detect trivial levels
+      rule (BBB/BUB/BBB -> ***/*Y*/***)
+      rule (* Y -> Y *)
+      rule (Y* -> *Y)
+    
+    prl (O -> o)
+    union (symbol="?", values="aBhA")
+    all: # retract dead ends
+      rule (????/????/???? ????/?oSS/???? ????/????/???? -> ****/****/**** ****/*oBB/**** ****/****/****)
+      rule (???/???/??? ???/?o?/??? ???/?S?/??? ???/?S?/??? -> ***/***/*** ***/*o*/*** ***/*B*/*** ***/*B*/***)
+      rule (???/?S?/??? ???/?S?/??? ???/?o?/??? ???/???/??? -> ***/*B*/*** ***/*B*/*** ***/*o*/*** ***/***/***)
+    
+    all (oSSoSSo/S*****S/S*****S/o**V**o/S*****S/S*****S/oSSoSSo -> *******/*PPPPP*/*PPPPP*/*PPvPP*/*PPPPP*/*PPPPP*/*******) # detect rooms
+    all: # repair removed stairs
+      rule (ABA -> *a*)
+      rule (aBa -> *a*)
+    
+    prl:
+      rule (l -> i)
+      rule (S -> i)
+      rule (V -> o)
+      rule (u -> w)
+    
+    prl (o i i o i i o i i o -> O * * O * * O * * O) # mark triple ladders
+    prl (o i i o i i o -> O * * O * * O) # mark double ladders
+    all: # delete unused bridges
+      rule (hB -> a*)
+      rule (BBB/BoB/BBB BBB/aaa/BBB -> ***/*B*/*** ***/BBB/***)
+      rule (EaE -> *E*)
+    
+
+    union (symbol="!", values="Bi")
+    map (scale="5/3 5/3 6/3", values="BaWUyogEpTCOYMAPeDFiKkXGRrwxb", folder="SeaVilla"):
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB aaB/aaB/BBB", fout="TopOut", legend="Ea*g")
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB aaa/aaa/aaB", fout="TopIn", legend="Ea*g")
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB aaB/aaB/aaB", fout="TopWall", legend="Ea*g")
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB aaa/aaa/aaa", fout="TopStone", legend="E*g")
+
+      rule (in="aaB/aaB/BBB BBB/BoB/BBB aaB/aaB/BBB", fout="Out", legend="E*a")
+      rule (in="aaa/aaa/aaB BBB/BoB/BBB aaa/aaa/aaB", fout="In", legend="Ea*")
+      rule (in="aaB/aaB/aaB BBB/BoB/BBB aaB/aaB/aaB", fout="Wall", legend="E*a")
+      rule (in="aaa/aaa/aaa BBB/BoB/BBB aaa/aaa/aaa", fout="Stone", legend="Ea*")
+
+      rule (in="BBB/aaB/aaB BBB/BoB/BBB aaa/aaa/aaB", fout="OutIn", legend="Ea*")
+      rule (in="aaB/aaB/BBB BBB/BoB/BBB aaB/aaB/aaB", fout="OutWall", legend="E*a")
+      rule (in="aaB/aaB/aaB BBB/BoB/BBB aaa/aaa/aaB", fout="OutIn", legend="Ea*")
+      rule (in="aaa/aaa/aaB BBB/BoB/BBB aaa/aaa/aaa", fout="Stone", legend="Ea*")
+      rule (in="aaB/aaB/aaB BBB/BoB/BBB aaa/aaa/aaa", fout="Stone", legend="Ea*")
+      rule (in="aaB/aaB/BBB BBB/BoB/BBB aaa/aaa/aaa", fout="Stone", legend="Ea*")
+
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB hah/aaa/hah", fout="TopCross", legend="Eg*")
+      rule (in="aaa/aaa/aaa BBB/BoB/BBB hah/aaa/hah", fout="Cross", legend="P*")
+
+      rule (in="BBB/BBB/BBB BBB/ioB/BBB AAB/aiB/AAB", fout="StairsTop", legend="*")
+      rule (in="aaB/aiB/aaB BBB/Boi/BBB AAA/aaa/AAA", fout="StairsBottom", legend="EabW*e")
+      rule (in="BBB/BBB/BBB BBB/iOB/BBB AAB/aiB/AAB", fout="LadderTop", legend="E*W")
+      rule (in="aaB/aiB/aaB BBB/BOi/BBB AAA/aaa/AAA", fout="LadderBottom", legend="EaW*D")
+      rule (in="aaB/aiB/aaB BBB/BOB/BBB AAB/aiB/AAB", fout="Ladder", legend="EaD*")
+      rule (in="aaB/aiB/aaB BBB/BwB/BBB AAA/aaa/AAA", fout="Pier", legend="yUw*")
+
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB AAB/aaB/AAB", fout="TopEdge", legend="Ex*ag")
+      rule (in="aaB/aaB/aaB BBB/BoB/BBB AAB/aaB/AAB", fout="Edge", legend="E*")
+      rule (in="aaB/aaB/aaB BBB/BoB/BBB AAA/aaa/AAA", fout="Dir", legend="Ea*")
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB AAA/aaa/AAA", fout="TopDir", legend="E*g")
+      rule (in="aaa/aaa/aaa BBB/BoB/BBB AAA/aaa/AAA", fout="Dir", legend="Ea*")
+
+      rule (in="BBB/BBB/BBB BBB/BwB/BBB aaa/aaa/aaa", fout="Water", legend="yU*")
+      rule (in="BBB/BBB/BBB BBB/BwB/BBB hah/aaa/hah", fout="Water", legend="yU*")
+      rule (in="BBB/BBB/BBB BBB/BwB/BBB AAA/aaa/AAA", fout="Water", legend="yU*")
+      rule (in="aaB/aaB/aaB BBB/BwB/BBB AAA/aaa/AAA", fout="Water", legend="yU*")
+      rule (in="aaB/aaB/aaB BBB/BwB/BBB aaa/aaa/aaa", fout="WaterWall", legend="yaU*")
+      rule (in="aaa/aaa/aaB BBB/BwB/BBB aaa/aaa/aaa", fout="WaterWall", legend="yaU*")
+      rule (in="aaB/aaB/BBB BBB/BwB/BBB aaa/aaa/aaa", fout="WaterWall", legend="yaU*")
+      rule (in="aaa/aaa/aaa BBB/BwB/BBB aaa/aaa/aaa", fout="WaterWall", legend="yaU*")
+      rule (in="aaa/aaa/aaa BBB/BwB/BBB hah/aaa/hah", fout="Water", legend="yU*")
+      rule (in="aaa/aaa/aaa BBB/BwB/BBB AAA/aaa/AAA", fout="Water", legend="yU*")
+
+      rule (in="BBB/BBB/BBB BBB/ioi/BBB AAA/aaa/AAA", fout="Line", legend="EW*")
+      rule (in="aaa/aaa/aaa BBB/ioi/BBB AAA/aaa/AAA", fout="Line", legend="EW*")
+      rule (in="aaB/aaB/aaB BBB/ioi/BBB AAA/aaa/AAA", fout="Line", legend="EW*")
+      rule (in="BBB/BBB/BBB B*B/io*/B*B hah/aaa/hah", fout="CrossX", legend="EW*")
+      rule (in="aaa/aaa/aaa B*B/io*/B*B hah/aaa/hah", fout="CrossX", legend="EW*")
+
+      rule (in="***/***/*** PPP/PvP/PPP aaa/aaa/aaa", fout="Room", legend="T*")
+      rule (in="***/***/*** PiB/io!/B!B hah/aaa/hah", fout="RoomOut", legend="TaWE*")
+      rule (in="***/***/*** PiP/ioi/PiB hah/aaa/hah", fout="RoomIn", legend="TaW*")
+      rule (in="***/***/*** PiB/ioi/BiP hah/aaa/hah", fout="RoomDouble", legend="TaW*")
+      rule (in="***/***/*** PiB/io!/PiB hah/aaa/hah", fout="RoomWall", legend="TaW*")
+      rule (in="***/***/*** PiP/ioi/PiP hah/aaa/hah", fout="Room", legend="T*")
+      rule (in="***/***/*** PiP/PoP/PiP AaA/AaA/AaA", fout="Room", legend="T*")
+      rule (in="***/***/*** PiB/PoB/PiB AaA/AaA/AaA", fout="RoomWall", legend="TaW*")
+
+      rule (in="BBB/BBB/BBB BBB/ioi/BBB BBB/aaa/BBB", fout="Line", legend="EW*")
+      rule (in="BBB/BBB/BBB BBB/ioi/BBB BBB/EEE/BBB", fout="BridgeWood", legend="*o")
+      rule (in="BBB/BBB/BBB BBB/ioi/BBB AAB/aaa/AAB", fout="Line", legend="EW*")
+      rule (in="aaB/aaB/aaB BBB/ioi/BBB AAB/aaa/AAB", fout="Line", legend="EW*")
+      rule (in="BBB/BBB/BBB BBB/BoB/BBB AAB/aaa/AAB", fout="TopEdge", legend="Ex*ag")
+      rule (in="aaB/aaB/aaB BBB/BoB/BBB AAB/aaa/AAB", fout="Edge", legend="E*")
+      rule (in="BBB/BBB/BBB BBB/ioi/BBB AAB/aaE/AAB", fout="TopContactWood", legend="Eo*W")
+      rule (in="aaB/aaB/aaB BBB/ioi/BBB AAB/aaE/AAB", fout="ContactWood", legend="Eo*W")
+
+      rule (in="***/***/*** ***/iU*/*** ***/***/***", fout="Goal", legend="EW*C")
+      rule (in="***/***/*** BBB/BKi/BBB ***/***/***", fout="KeyK", legend="EW*KOM")
+      rule (in="***/***/*** BBB/BXi/BBB ***/***/***", fout="KeyL", legend="EW*XOM")
+      rule (in="***/***/*** BBB/BRi/BBB ***/***/***", fout="KeyR", legend="EW*ROM")
+      rule (in="***/***/*** BBB/iki/BBB ***/***/***", fout="LockK", legend="EW*kY")
+      rule (in="***/***/*** BBB/iGi/BBB ***/***/***", fout="LockL", legend="EW*GY")
+      rule (in="***/***/*** BBB/iri/BBB ***/***/***", fout="LockR", legend="EW*rY")
+
+        one (file="DrawPier", legend="BowaEW")
+        all: # finalize pier
+          rule (o U -> * o)
+          rule (o y -> * o)
+        
+        prl: # complete roads
+          rule (WEW -> *W*)
+          rule (WEB BBW -> *W* ***)
+        
+        prl: # fill some gaps
+          rule (aBa -> *a*)
+          rule (aEa -> *a*)
+          rule (DBa -> *a*)
+          rule (a B a -> * a *)
+          rule (a B E -> * a *)
+          rule (a E -> * a)
+          rule (EaE *B* *U* -> *** *a* ***)
+        
+        prl: # fill stair gaps
+          rule (aBe -> *a*)
+          rule (aUe -> *a*)
+        
+        prl (e -> B) # finalize stairs
+        all:
+          rule (PE -> *P) # mark redundant floors
+          rule (a U -> * a)
+          rule (a y -> * a)
+        
+        prl (P -> B)
+        prl: # remove redundant walls
+          rule (BBB BaB BaB BaB BaB BaB *a* -> *** *B* *B* *B* *B* *B* *E*)
+          rule (BaB BaB BaB BaB BaB BaB BBB -> *B* *B* *B* *B* *B* *B* ***)
+        
+        all: # continue columns above rooms
+          rule (aaa/aaa/aaa BBB/BBB/BBB -> ***/***/*** aaa/aaa/aaa)
+          rule (aaa/aaa/aaa TTT/TTT/TTT -> ***/***/*** aaa/aaa/aaa)
+        
+        union (symbol="?", values="BaKXRkGr")
+        all (??g?? -> **B**) # remove thin grass
+        all (BBYBYBYB -> *Y*Y*Y*Y) # finalize doors
+        prl (Y E -> * Y)
+        all:
+          rule (YE -> *a)
+          rule (Y*/*E -> **/*a)
+        
+        union (symbol="@", values="aEW")
+        prl (symmetry="(xyz)"):
+          rule (@B -> *A)
+          rule (@*/*B -> **/*A)
+        
+        markov:
+          one:
+            rule (pK -> *p)
+            rule (pk -> *p)
+          
+          path (from="K", to="k", on="A", color="p", inertia="True")
+        
+        markov:
+          one:
+            rule (pX -> *p)
+            rule (pG -> *p)
+          
+          path (from="X", to="G", on="A", color="p", inertia="True")
+        
+        markov:
+          one:
+            rule (pR -> *p)
+            rule (pr -> *p)
+          
+          path (from="R", to="r", on="A", color="p", inertia="True")
+        
+        prl:
+          rule (A -> B)
+          rule (k -> B)
+          rule (G -> B)
+          rule (r -> B)
+          rule (O p -> * O)
+          rule (b a -> * E)
+          rule (aax aBB aBB -> **a *aa *a*)
+        
+        prl: # final colors
+          rule (i -> E)
+          rule (F -> a)
+          rule (D -> a)
+          rule (b -> a)
+          rule (x -> a)
+        
+    
+
+  
+
